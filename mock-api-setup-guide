@@ -1,0 +1,308 @@
+# Mock API Setup Guide for Inya.ai Hackathon
+
+## Quick Setup with JSON Server (15 minutes)
+
+### Step 1: Install JSON Server
+```bash
+npm install -g json-server
+```
+
+### Step 2: Create db.json file
+Save this as `db.json` in your project folder:
+
+```json
+{
+  "orders": [
+    {
+      "id": "ORD-2025-001",
+      "order_id": "ORD-2025-001",
+      "email": "john.d***@email.com",
+      "phone": "+91-98***-***76",
+      "items": [
+        {
+          "item_id": "ITM-001",
+          "name": "Wireless Headphones",
+          "quantity": 1,
+          "price": 129.99
+        }
+      ],
+      "status": "confirmed",
+      "last_event": "Order placed successfully",
+      "tracking_id": "TRK-WH-001",
+      "order_date": "2025-09-25T10:30:00Z",
+      "total_amount": 129.99
+    },
+    {
+      "id": "ORD-2025-002",
+      "order_id": "ORD-2025-002",
+      "email": "sarah.m***@email.com",
+      "phone": "+91-99***-***45",
+      "items": [
+        {
+          "item_id": "ITM-002",
+          "name": "Laptop Stand",
+          "quantity": 1,
+          "price": 79.99
+        }
+      ],
+      "status": "shipped",
+      "last_event": "Out for delivery",
+      "tracking_id": "TRK-LS-002",
+      "order_date": "2025-09-24T14:20:00Z",
+      "total_amount": 79.99
+    },
+    {
+      "id": "ORD-2025-003",
+      "order_id": "ORD-2025-003",
+      "email": "mike.j***@email.com",
+      "phone": "+91-97***-***89",
+      "items": [
+        {
+          "item_id": "ITM-003",
+          "name": "Phone Case",
+          "quantity": 2,
+          "price": 19.99
+        }
+      ],
+      "status": "delivered",
+      "last_event": "Successfully delivered",
+      "tracking_id": "TRK-PC-003",
+      "order_date": "2025-09-22T09:15:00Z",
+      "total_amount": 39.98
+    }
+  ],
+  "shipments": [
+    {
+      "id": "TRK-WH-001",
+      "tracking_id": "TRK-WH-001",
+      "order_id": "ORD-2025-001",
+      "carrier": "FastShip Express",
+      "status": "in_transit",
+      "current_location": "Mumbai Sorting Facility",
+      "eta_iso": "2025-09-28T18:00:00Z",
+      "eta_friendly": "Tomorrow by 6 PM",
+      "tracking_events": [
+        {
+          "timestamp": "2025-09-25T11:00:00Z",
+          "status": "picked_up",
+          "location": "Warehouse Delhi"
+        },
+        {
+          "timestamp": "2025-09-26T08:30:00Z",
+          "status": "in_transit",
+          "location": "Mumbai Sorting Facility"
+        }
+      ]
+    },
+    {
+      "id": "TRK-LS-002",
+      "tracking_id": "TRK-LS-002",
+      "order_id": "ORD-2025-002",
+      "carrier": "QuickDelivery",
+      "status": "out_for_delivery",
+      "current_location": "Local Delivery Hub",
+      "eta_iso": "2025-09-27T15:30:00Z",
+      "eta_friendly": "Today by 3:30 PM",
+      "tracking_events": [
+        {
+          "timestamp": "2025-09-24T15:00:00Z",
+          "status": "picked_up",
+          "location": "Warehouse Bangalore"
+        },
+        {
+          "timestamp": "2025-09-27T09:00:00Z",
+          "status": "out_for_delivery",
+          "location": "Local Delivery Hub"
+        }
+      ]
+    },
+    {
+      "id": "TRK-PC-003",
+      "tracking_id": "TRK-PC-003",
+      "order_id": "ORD-2025-003",
+      "carrier": "ExpressPost",
+      "status": "delivered",
+      "current_location": "Delivered",
+      "eta_iso": "2025-09-23T16:45:00Z",
+      "eta_friendly": "Delivered",
+      "tracking_events": [
+        {
+          "timestamp": "2025-09-22T10:00:00Z",
+          "status": "picked_up",
+          "location": "Warehouse Chennai"
+        },
+        {
+          "timestamp": "2025-09-23T16:45:00Z",
+          "status": "delivered",
+          "location": "Customer Address"
+        }
+      ]
+    }
+  ],
+  "refunds": [
+    {
+      "id": "REF-2025-001",
+      "refund_id": "REF-2025-001",
+      "order_id": "ORD-2025-001",
+      "item_id": "ITM-001",
+      "amount": 129.99,
+      "method": "original_payment",
+      "reason_code": "defective",
+      "status": "processing",
+      "sla_days": 5,
+      "created_at": "2025-09-26T10:00:00Z",
+      "estimated_completion": "2025-10-01T10:00:00Z"
+    }
+  ],
+  "returns": [
+    {
+      "id": "RET-2025-001",
+      "return_id": "RET-2025-001",
+      "order_id": "ORD-2025-002",
+      "item_id": "ITM-002",
+      "reason_code": "wrong_item",
+      "condition_ok": true,
+      "pickup_address": {
+        "street": "123 Main Street",
+        "city": "Mumbai",
+        "state": "Maharashtra",
+        "pincode": "400001",
+        "landmark": "Near City Mall"
+      },
+      "preferred_timeslot": "morning",
+      "pickup_window": "Tomorrow 10 AM - 2 PM",
+      "status": "pickup_scheduled",
+      "created_at": "2025-09-26T14:00:00Z"
+    }
+  ],
+  "complaints": [
+    {
+      "id": "TKT-2025-001",
+      "ticket_id": "TKT-2025-001",
+      "order_id": "ORD-2025-003",
+      "category": "damaged",
+      "description": "Item arrived with visible damage on the packaging",
+      "priority": "high",
+      "status": "open",
+      "sla_hours": 24,
+      "evidence_links": ["photo1.jpg", "photo2.jpg"],
+      "created_at": "2025-09-26T16:30:00Z",
+      "assigned_to": "Support Team A"
+    }
+  ]
+}
+```
+
+### Step 3: Start JSON Server
+```bash
+json-server --watch db.json --port 3000 --host 0.0.0.0
+```
+
+### Step 4: Test Your APIs
+
+Your mock server will be running at `http://localhost:3000`
+
+**Test URLs:**
+- GET http://localhost:3000/orders?order_id=ORD-2025-001
+- GET http://localhost:3000/shipments?tracking_id=TRK-WH-001
+- POST http://localhost:3000/refunds
+- POST http://localhost:3000/returns  
+- POST http://localhost:3000/complaints
+
+## For Postman Mock Server Setup
+
+### Step 1: Create Collection in Postman
+
+1. Open Postman
+2. Create new collection "E-commerce APIs"
+3. Add these requests:
+
+**Request 1: Get Order**
+- Method: GET
+- URL: {{baseUrl}}/orders/{{order_id}}
+- Example Response: (Use order data from above)
+
+**Request 2: Get Shipment**
+- Method: GET  
+- URL: {{baseUrl}}/shipments/{{tracking_id}}
+- Example Response: (Use shipment data from above)
+
+**Request 3: Create Refund**
+- Method: POST
+- URL: {{baseUrl}}/refunds
+- Request Body: 
+```json
+{
+  "order_id": "{{order_id}}",
+  "item_id": "{{item_id}}",
+  "method": "{{refund_method}}",
+  "reason_code": "{{reason_code}}"
+}
+```
+
+**Request 4: Create Return**
+- Method: POST
+- URL: {{baseUrl}}/returns
+- Request Body:
+```json
+{
+  "order_id": "{{order_id}}",
+  "item_id": "{{item_id}}",
+  "reason_code": "{{reason_code}}",
+  "pickup_address": "{{pickup_address}}",
+  "preferred_timeslot": "{{preferred_timeslot}}"
+}
+```
+
+**Request 5: Create Complaint**
+- Method: POST
+- URL: {{baseUrl}}/complaints
+- Request Body:
+```json
+{
+  "order_id": "{{order_id}}",
+  "category": "{{category}}",
+  "description": "{{description}}",
+  "evidence_links": []
+}
+```
+
+### Step 2: Create Mock Server in Postman
+
+1. Right-click on your collection
+2. Select "Mock Collection"
+3. Name it "Ecommerce Mock Server"
+4. Copy the mock server URL (you'll need this for Inya.ai)
+
+## Next Steps
+
+Once your mock server is running:
+
+1. **Test all endpoints** with sample data
+2. **Copy the base URL** of your mock server
+3. **Go back to Inya.ai** and configure the Custom integration
+4. **Set up each API endpoint** in the integrations panel
+
+## Quick Test Commands
+
+```bash
+# Test Order API
+curl "http://localhost:3000/orders?order_id=ORD-2025-001"
+
+# Test Shipment API  
+curl "http://localhost:3000/shipments?tracking_id=TRK-WH-001"
+
+# Test Refund API
+curl -X POST "http://localhost:3000/refunds" \
+  -H "Content-Type: application/json" \
+  -d '{"order_id":"ORD-2025-001","method":"original_payment","reason_code":"defective"}'
+```
+
+## Important Notes
+
+- **Keep the server running** while testing with Inya.ai
+- **Use realistic data** for better demo presentation
+- **Include error scenarios** (404, 500) for robust testing
+- **Document your API endpoints** for the hackathon submission
+
+Choose JSON Server if you want to get started immediately, or Postman if you want more professional mock server features!
